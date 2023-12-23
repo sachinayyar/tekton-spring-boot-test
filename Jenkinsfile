@@ -22,14 +22,14 @@ pipeline {
             '''
       }
     }
-    // stage('Deployment') {
-    //   steps {
-    //     echo 'Deployment...'
-    //     sh '''
-    //         oc new-app docker.io/ayyarsachin/jen-pipeline:latest --name spring-app
-    //         '''
-    //   }
-    // }
+    stage('Deployment') {
+      steps {
+        echo 'Deployment...'
+        sh '''
+            oc new-app docker.io/ayyarsachin/demoapp:latest --name spring-app
+            '''
+      }
+    }
     
 //        script {
 //
