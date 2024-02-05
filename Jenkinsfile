@@ -21,7 +21,7 @@ pipeline {
       steps{
         script{
         withDockerRegistry(credentialsId: 'd192f063-bef2-4ad2-a796-fd652dc6676e', toolName: 'docker' ) {
-        sh 'sudo docker version'
+        // sh 'sudo docker version'
         sh 'sudo docker build -t ayyarsachin/first-demo-project .'
         sh 'docker image list'
         sh 'docker tag  ayyarsachin/first-demo-project ayyarsachin/first-demo-project:new'
