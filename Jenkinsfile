@@ -2,8 +2,11 @@
 
 pipeline {
 
-  agent {
-    label 'maven'
+  agent any
+
+  tools {
+    jdk 'java-17'
+    maven 'maven 3.8.6'
   }
 
   stages {
@@ -11,25 +14,29 @@ pipeline {
       steps {
         echo 'Building..'
         
-        sh 'mvn clean package'
+        sh 'mvn clean package -DskipTests=true'
       }
     }
-    stage('Create Container Image') {
-      steps {
-        echo 'Create Container Image..'
-        sh '''
-            oc start-build -F spring-boot --from-dir=.
-            '''
-      }
+    stage("Docker build"){
+      steps{
+        script{
+        withDockerRegistry(credentialsId: 'd192f063-bef2-4ad2-a796-fd652dc6676e', toolName: 'docker' ) {
+        sh 'sudo docker version'
+        sh 'sudo docker build -t ayyarsachin/first-demo-project .'
+        sh 'docker image list'
+        sh 'docker tag  ayyarsachin/first-demo-project ayyarsachin/first-demo-project:new'
+        }
+     }
     }
-    stage('Deployment') {
-      steps {
-        echo 'Deployment...'
-        sh '''
-            oc new-app docker.io/ayyarsachin/demoapp:latest --name spring-app
-            '''
-      }
     }
+    // stage('Deployment') {
+    //   steps {
+    //     echo 'Deployment...'
+    //     sh '''
+    //         oc new-app docker.io/ayyarsachin/jen-pipeline:latest --name spring-app
+    //         '''
+    //   }
+    // }
     
 //        script {
 //
