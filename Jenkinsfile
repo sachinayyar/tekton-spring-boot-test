@@ -25,18 +25,18 @@ pipeline {
         sh 'docker build -t ayyarsachin/first-demo-project .'
         sh 'docker image list'
         sh 'docker tag  ayyarsachin/first-demo-project ayyarsachin/first-demo-project:new'
+        sh 'docker push ayyarsachin/first-demo-project:new'
         }
      }
     }
     }
-    // stage('Deployment') {
-    //   steps {
-    //     echo 'Deployment...'
-    //     sh '''
-    //         oc new-app docker.io/ayyarsachin/jen-pipeline:latest --name spring-app
-    //         '''
-    //   }
-    // }
+    stage('Deployment') {
+      steps {
+        echo 'Deployment...'
+        sh 'docker pull ayyarsachin/first-demo-project:new'
+        sh 'docker run -d --name sachin -p 8084:8080 ayyarsachin/first-demo-project:new'
+      }
+    }
     
 //        script {
 //
