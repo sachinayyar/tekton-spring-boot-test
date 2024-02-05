@@ -24,17 +24,37 @@ pipeline {
         // sh 'sudo docker version'
         sh 'docker build -t ayyarsachin/first-demo-project .'
         sh 'docker image list'
-        sh 'docker tag  ayyarsachin/first-demo-project ayyarsachin/first-demo-project:new'
-        sh 'docker push ayyarsachin/first-demo-project:new'
+        sh 'docker tag  ayyarsachin/first-demo-project ayyarsachin/first-demo-project:dev'
+        sh 'docker push ayyarsachin/first-demo-project:dev'
         }
      }
     }
     }
-    stage('Deployment') {
+    stage('Deployment in DEV ENV') {
       steps {
         echo 'Deployment...'
-        sh 'docker pull ayyarsachin/first-demo-project:new'
-        sh 'docker run -d --name sachin -p 8084:8080 ayyarsachin/first-demo-project:new'
+        sh 'docker rmi ayyarsachin/first-demo-project:dev'
+        sh 'docker pull ayyarsachin/first-demo-project:dev'
+        echo 'deleting the previous container.....'
+        sh 'docker rm devcontainer'
+        sh 'docker run -d --name devcontainer -p 8084:8080 ayyarsachin/first-demo-project:dev'
+      }
+    }
+    stage('Image tag to prod env') {
+      steps {
+        echo 'tagging....'
+        sh 'docker tag ayyarsachin/first-demo-project:dev ayyarsachin/first-demo-project:prod'
+        sh 'docker push ayyarsachin/first-demo-project:prod'
+      }
+    }
+    stage('Deployment in PROD ENV') {
+      steps {
+        echo 'Deployment...'
+        sh 'docker rmi ayyarsachin/first-demo-project:prod'
+        sh 'docker pull ayyarsachin/first-demo-project:prod'
+        echo 'deleting previous running container'
+        sh 'docker rm prodcontainer'
+        sh 'docker run -d --name sachin -p 8084:8080 ayyarsachin/first-demo-project:prod'
       }
     }
     
