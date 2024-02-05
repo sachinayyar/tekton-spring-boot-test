@@ -42,11 +42,15 @@ pipeline {
     }
     stage('Image tag to prod env') {
       steps {
+        script{
+        withDockerRegistry(credentialsId: 'd192f063-bef2-4ad2-a796-fd652dc6676e', toolName: 'docker' ){
         echo 'tagging....'
         sh 'docker tag ayyarsachin/first-demo-project:dev ayyarsachin/first-demo-project:prod'
         sh 'docker push ayyarsachin/first-demo-project:prod'
       }
     }
+   }
+  }
     stage('Deployment in PROD ENV') {
       steps {
         echo 'Deployment...'
