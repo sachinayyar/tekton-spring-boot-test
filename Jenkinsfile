@@ -54,7 +54,7 @@ pipeline {
         sh 'docker pull ayyarsachin/first-demo-project:prod'
         echo 'deleting previous running container'
         sh 'docker rm prodcontainer'
-        sh 'docker run -d --name sachin -p 8084:8080 ayyarsachin/first-demo-project:prod'
+        sh 'docker run -d --name sachin -p 8085:8080 ayyarsachin/first-demo-project:prod'
       }
     }
     
